@@ -1,39 +1,26 @@
-import numpy
 import random
+from predef import *
 from colorama import Fore, Style, init
 init(autoreset=True)
 
-
-
-blank_cell = -1
-mine_cell = 0
-
-start_cell = -1     # celula apasata la inceputul jocului (mereu goala)
-coverd_cell = 0     # celula neatinsa inca de player in timpul jocului
-uncoverd_cell = 1   # celula atinsa de player in timpul jocului
-marked_cell = 2     # celula marcata de player ca fiind mine
-
-game_over_state = -1
-still_going_state = 0
-game_won_state = 1
-
-
+def get_val_from_poz(tabela, x, y):
+     return tabela[x][y][0]
 
 def print_game(tabela):
     for row in tabela:
         for element in row:
             if element[1] == start_cell:
-                # color = Fore.GREEN
-                color = Fore.WHITE
+                color = Fore.GREEN
+                # color = Fore.WHITE
             elif element[0] == mine_cell:
-                # color = Fore.RED
-                color = Fore.WHITE
+                color = Fore.RED
+                # color = Fore.WHITE
             elif element[0] == blank_cell:
                 # color = Fore.BLACK
                 color = Fore.WHITE
             else:
-                # color = Fore.YELLOW
-                color = Fore.WHITE
+                color = Fore.YELLOW
+                # color = Fore.WHITE
 
             if  element[1] == coverd_cell:
                 print(f'{color}{"*":2}{Style.RESET_ALL} | ', end='')
@@ -42,19 +29,28 @@ def print_game(tabela):
 
         print()
 
+def make_move(tabela, move_type, x, y):
+    if move_type == click_type:
+        if tabela[x][y][0] == blank_cell:
+            uncover_area(tabela, x, y)
+        else:
+            tabela[x][y] = (tabela[x][y][0], uncoverd_cell)
+    elif move_type == mark_type:
+        tabela[x][y] = (tabela[x][y][0], marked_cell)
+
 def verify_state(tabela):
     win = True
-    for row in tabela:
-        for element in row:
-            if element[0] == mine_cell:
-                if element[1] != marked_cell:
-                    win = False
-                elif element[1] == uncoverd_cell:
-                    return game_over_state
-            elif element[0] > 1 and element[1] == coverd_cell:
-                return still_going_state
+    for x in range(len(tabela)):
+        for y in range(len(tabela[0])):
+            if tabela[x][y][0] == mine_cell and tabela[x][y][1] == uncoverd_cell:
+                return game_over_state
+            elif (tabela[x][y][0] == -1 or tabela[x][y][0] > 0) and (tabela[x][y][1] == coverd_cell or tabela[x][y][1] == marked_cell):
+                win = False
+    
     if win:
         return game_won_state
+    else:
+        return still_going_state
 
 def mines_assignation(tabela, num_mines):
     directii = [-1, 0, 1]
@@ -110,22 +106,3 @@ def start_initialization(tabela, num_mines, start_cell_poz):
 def initialization(dimX, dimY):
     tabela = [[(blank_cell, coverd_cell) for y in range(dimY)] for x in range(dimX)]
     return tabela
-    
-
-def minesweeper():
-    dimX = 9
-    dimY = 9
-    num_mines = 10
-    game_board = initialization(dimX, dimY)
-    start_cell_poz = (4,3)
-    game_board = start_initialization(game_board, num_mines, start_cell_poz)
-    print_game(game_board)
-    if verify_state(game_board) == still_going_state:
-        print("aaaa")
-
-    if verify_state(game_board) == game_over_state:
-        print("OPS! You just hit a mine... Game Over :(")
-    elif verify_state(game_board) == game_won_state:
-        print("Congrats! You found all the mines :)")
-
-minesweeper()
