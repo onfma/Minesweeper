@@ -1,14 +1,15 @@
-blank_cell = -1
-mine_cell = 0
+# Constants
+blank_cell = -1         # Representation for an empty cell in the game
+mine_cell = 0           # Representation for a cell containing a mine in the game
 
-start_cell = -1     # celula apasata la inceputul jocului (mereu goala)
-coverd_cell = 0     # celula neatinsa inca de player in timpul jocului
-uncoverd_cell = 1   # celula atinsa de player in timpul jocului
-marked_cell = 2     # celula marcata de player ca fiind mine
+start_cell = -1         # The cell pressed at the beginning of the game (always empty)
+coverd_cell = 0         # The cell untouched by the player during the game
+uncoverd_cell = 1       # The cell touched by the player during the game
+marked_cell = 2         # The cell marked by the player as a mine
 
-game_over_state = -1
-still_going_state = 0
-game_won_state = 1
+game_over_state = -1    # Game state indicating the game is over
+still_going_state = 0   # Game state indicating the game is still in progress
+game_won_state = 1      # Game state indicating the game is won
 
-click_type = 0
-mark_type = 1
+click_type = 0          # Type of move: clicking on a cell
+mark_type = 1           # Type of move: marking a cell as a mine
